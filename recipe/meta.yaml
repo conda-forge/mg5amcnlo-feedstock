@@ -16,12 +16,11 @@ source:
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
   skip: true  # [py<37 or py>311 or win]
-  number: 1
+  number: 2
   script:
     # Remove unnecessary files
     - rm -r source/.github
     - rm -r source/tests
-    - rm -r source/vendor/CutTools
     - rm source/.bzrignore
     - rm source/.gitignore
     - rm source/code-notes
@@ -84,6 +83,7 @@ requirements:
     - fortran-compiler
     - make
     - tar
+    - wget  # for madgraph install command
     - perl
     - python
     - six
@@ -92,6 +92,7 @@ requirements:
     - emela
     - lhapdf
     - ply
+    - cuttools-static
     - oneloop
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
