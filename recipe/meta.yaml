@@ -129,6 +129,9 @@ test:
 
     - echo "exit" | mg5_aMC
 
+    # Download NNPDF23_lo_as_0130_qed in advance to avoid long output in CI logs
+    - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt
+
     - mg5_aMC $RECIPE_DIR/tutorial.mg5
 
 about:
