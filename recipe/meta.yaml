@@ -129,8 +129,8 @@ test:
     - echo "exit" | mg5_aMC
 
     # Download NNPDF23_lo_as_0130_qed in advance to avoid long output in CI logs
-    - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt
-    - sleep 2
+    # Somehow downloading in advance causes a compilation error on x86 Linux only in CI
+    - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt  # [not (linux and x86_64)]
 
     - mg5_aMC $RECIPE_DIR/tutorial.mg5
 
