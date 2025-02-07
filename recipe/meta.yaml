@@ -91,7 +91,6 @@ requirements:
     - fastjet-contrib
     - emela
     - lhapdf
-    - pythia8
     - ply
     - oneloop
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
