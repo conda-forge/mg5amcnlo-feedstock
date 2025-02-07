@@ -92,8 +92,8 @@ requirements:
     - pythia8
     - ply
     - oneloop
-    # ninja-hep-ph uses libquadmath and so does not support macOS
-    - ninja-hep-ph  # [linux]
+    # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
+    - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
     - collier
     - ghostscript
 
