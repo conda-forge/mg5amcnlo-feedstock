@@ -80,8 +80,8 @@ requirements:
     - lhapdf
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
+    - cxx-compiler
+    - fortran-compiler
     - make
     - tar
     - perl
