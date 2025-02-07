@@ -67,6 +67,8 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
     # - make
+    - cross-python_{{ target_platform }}  # [build_platform != target_platform]
+    - python  # [build_platform != target_platform]
     - sed
     - grep
   host:
