@@ -211,7 +211,7 @@ eMELA = REPLACE_WITH_PREFIX/bin/eMELA-config
 #! Set the Ninja directory containing ninja's library
 #! if '' or None: disabling ninja
 #! if ninja=/PATH/TO/ninja/lib: use that specific installation path for ninja
-ninja = REPLACE_WITH_PREFIX/lib
+# ninja = REPLACE_WITH_PREFIX/lib
 
 #! Set the COLLIER directory containing COLLIER's library
 #! if '' or None: disabling COLLIER
