@@ -16,7 +16,7 @@ source:
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
   skip: true  # [py<37 or py>311 or win]
-  number: 2
+  number: 3
   script:
     # Remove unnecessary files
     - rm -r source/.github
@@ -31,10 +31,20 @@ build:
 
     # Fix bugs
     # FIXME: Use user space perl instead of system perl
-    - find source -type f -exec grep -Il '#!/usr/bin/perl -w' {} + | xargs sed -i 's|#!/usr/bin/perl -w|#!/usr/bin/env perl -w|g'
+    - find source -type f -exec grep -Il '#!/usr/bin/perl -w' {} + | xargs sed -i 's|#!/usr/bin/perl -w|#!/usr/bin/env perl\nuse warnings;|g'
 
     # Need to use -a to preserve symlinks
     - cp -a source $PREFIX/MG5_aMC
+
+    # Use packaged versions of vendored code
+    # CutTools
+    - rm -rf $PREFIX/MG5_aMC/vendor/CutTools
+    - mkdir -p $PREFIX/MG5_aMC/vendor/CutTools/includects
+    - mkdir -p $PREFIX/MG5_aMC/vendor/CutTools/src
+
+    - ln -s $PREFIX/include/cts $PREFIX/MG5_aMC/vendor/CutTools/src/
+    - ln -s $PREFIX/lib/libcts.a $PREFIX/MG5_aMC/vendor/CutTools/includects/
+    - ln -s $PREFIX/include/mpfun90/mpmodule.mod $PREFIX/MG5_aMC/vendor/CutTools/includects/
 
     # TODO: Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
