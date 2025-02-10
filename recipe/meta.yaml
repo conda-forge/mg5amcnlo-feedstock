@@ -33,8 +33,18 @@ build:
     # Need to use -a to preserve symlinks
     - cp -a source $PREFIX/MG5_aMC
 
-    # TODO: Use packaged versions of vendored code
-    # CutTools
+    # Use packaged versions of vendored code
+    # CutTools: TODO
+    # IREGI
+    # TODO: Compare https://github.com/mg5amcnlo/mg5amcnlo/blob/3.x/vendor/IREGI/src/oneloop/avh_olo_foriregi.f90 against avh_olo.f90 in oneloop
+    - rm -rf $PREFIX/MG5_aMC/vendor/IREGI
+    - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src
+    - ln -s $PREFIX/lib/libiregi.a $PREFIX/MG5_aMC/vendor/IREGI/src/
+    - ln -s $PREFIX/include/iregi/* $PREFIX/MG5_aMC/vendor/IREGI/src/
+    - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff
+    - ln -s $PREFIX/lib/libff.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/
+    - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql
+    - ln -s $PREFIX/lib/libqcdloop.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/
 
     # TODO: Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
@@ -92,9 +102,11 @@ requirements:
     - emela
     - lhapdf
     - ply
+    # MG5_aMC/vendor/ libraries
     # - cuttools-static
-    - oneloop
     # - mpfun90
+    - oneloop
+    - iregi-static
     - qcdloop-fortran-static
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
