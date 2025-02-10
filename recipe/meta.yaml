@@ -33,15 +33,8 @@ build:
     # Need to use -a to preserve symlinks
     - cp -a source $PREFIX/MG5_aMC
 
-    # # Use packaged versions of vendored code
-    # # CutTools
-    # - rm -rf $PREFIX/MG5_aMC/vendor/CutTools
-    # - mkdir -p $PREFIX/MG5_aMC/vendor/CutTools/includects
-    # - mkdir -p $PREFIX/MG5_aMC/vendor/CutTools/src
-
-    # - ln -s $PREFIX/include/cts $PREFIX/MG5_aMC/vendor/CutTools/src/
-    # - ln -s $PREFIX/lib/libcts.a $PREFIX/MG5_aMC/vendor/CutTools/includects/
-    # - ln -s $PREFIX/include/mpfun90/mpmodule.mod $PREFIX/MG5_aMC/vendor/CutTools/includects/
+    # TODO: Use packaged versions of vendored code
+    # CutTools
 
     # TODO: Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
@@ -84,8 +77,6 @@ requirements:
     - fastjet-cxx
     - emela
     - lhapdf
-    # - cuttools-static
-    # - mpfun90
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
     - cxx-compiler
@@ -101,9 +92,9 @@ requirements:
     - emela
     - lhapdf
     - ply
-    - cuttools-static
+    # - cuttools-static
     - oneloop
-    - mpfun90
+    # - mpfun90
     - qcdloop-fortran-static
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
