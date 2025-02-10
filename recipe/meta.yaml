@@ -105,10 +105,10 @@ requirements:
     - lhapdf
     - ply
     - cuttools-static
-    # - oneloop
+    - oneloop
     - mpfun90
     - qcdloop-fortran-static
-    # # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
+    # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
     # - collier
     - ghostscript
