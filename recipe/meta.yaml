@@ -40,7 +40,7 @@ build:
     - rm -rf $PREFIX/MG5_aMC/vendor/IREGI
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src
     - ln -s $PREFIX/lib/libiregi.a $PREFIX/MG5_aMC/vendor/IREGI/src/
-    - ln -s $PREFIX/include/iregi/* $PREFIX/MG5_aMC/vendor/IREGI/src/
+    - for file in $PREFIX/include/iregi/*; do ln -s "$file" $PREFIX/MG5_aMC/vendor/IREGI/src/; done
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff
     - ln -s $PREFIX/lib/libff.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql
@@ -87,6 +87,9 @@ requirements:
     - fastjet-cxx
     - emela
     - lhapdf
+    # Provide targets for symlink
+    - iregi-static
+    - qcdloop-fortran-static
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
     - cxx-compiler
