@@ -75,7 +75,7 @@ requirements:
     # used in the future along with make when bugs with Pythia8 are fixed
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
-    # - make
+    - make
     - cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - python  # [build_platform != target_platform]
     - sed
@@ -104,10 +104,10 @@ requirements:
     - emela
     - lhapdf
     - ply
-    # - cuttools-static
+    - cuttools-static
     # - oneloop
-    # - mpfun90
-    # - qcdloop-fortran-static
+    - mpfun90
+    - qcdloop-fortran-static
     # # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
     # - collier
@@ -150,7 +150,7 @@ test:
 
     - mg5_aMC $RECIPE_DIR/tutorial.mg5
 
-    - mg5_aMC $RECIPE_DIR/tutorial_amc-at-nlo.mg5
+    - mg5_aMC $RECIPE_DIR/tutorial_amc-at-nlo.mg5  # [build_platform == target_platform]
 
 about:
   home: https://github.com/mg5amcnlo/mg5amcnlo
