@@ -48,9 +48,20 @@ build:
     # TODO: StdHEP
 
     # Symlink libraries to HEPTools/ directory tree as mg5amcnlo looks there
-    # Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/lib
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/include
+    # Ninja
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/  # [linux and (x86_64 or ppc64le)]
+    # Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/collier/
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/lib/
@@ -65,6 +76,7 @@ build:
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
+    - sed -i '/ninja =/s/^# //g' $PREFIX/MG5_aMC/input/mg5_configuration.txt  # [linux and (x86_64 or ppc64le)]]
     - mv mg5_configuration.txt $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
     # Setup links
@@ -102,6 +114,7 @@ requirements:
     - iregi-static
     - qcdloop-fortran-static
     # HEPTools
+    - ninja-hep-ph-static  # [linux and (x86_64 or ppc64le)]
     - collier-static
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
@@ -126,7 +139,7 @@ requirements:
     - qcdloop-fortran-static
     # HEPTools
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
-    # - ninja-hep-ph  # [linux and (x86_64 or ppc64le)]
+    - ninja-hep-ph-static  # [linux and (x86_64 or ppc64le)]
     - collier-static
     - ghostscript
 
