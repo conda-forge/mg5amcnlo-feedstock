@@ -49,9 +49,11 @@ build:
 
     # Symlink libraries to HEPTools/ directory tree as mg5amcnlo looks there
     # Collier
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/lib
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/include
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/collier/
+    - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/lib/
     - ln -s $PREFIX/include/collier.mod $PREFIX/MG5_aMC/HEPTools/collier/include/
     - ln -s $PREFIX/include/collier.mod $PREFIX/MG5_aMC/HEPTools/include/
 
