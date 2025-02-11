@@ -50,6 +50,12 @@ build:
     # Symlink libraries to HEPTools/ directory tree as mg5amcnlo looks there
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/lib
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/include
+    # OneLOop
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/oneloop
+    - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/oneloop/
+    - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
+    - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; done
+    - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
     # Ninja
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib  # [linux and (x86_64 or ppc64le)]
@@ -111,6 +117,7 @@ requirements:
     - emela
     - lhapdf
     # Provide targets for symlink
+    - oneloop-static
     - iregi-static
     - qcdloop-fortran-static
     # HEPTools
@@ -134,7 +141,7 @@ requirements:
     # MG5_aMC/vendor/ libraries
     # - cuttools-static
     # - mpfun90
-    - oneloop
+    - oneloop-static
     - iregi-static
     - qcdloop-fortran-static
     # HEPTools
