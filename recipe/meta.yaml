@@ -96,8 +96,10 @@ build:
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
-    # FIXME: Make linux x86 and ppc64le only
-    - sed -i '/ninja =/s/^# //g' $PREFIX/MG5_aMC/input/mg5_configuration.txt
+    # c.f. https://github.com/conda/conda-build/issues/5618
+  {% if (linux and (x86_64 or ppc64le)) %}
+    - sed -i '/ninja =/s/^# //g' mg5_configuration.txt
+  {% endif %}
     - mv mg5_configuration.txt $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
     # Setup links
