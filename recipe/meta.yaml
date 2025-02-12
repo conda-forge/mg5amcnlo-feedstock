@@ -78,10 +78,6 @@ build:
     - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja  # [linux and (x86_64 or ppc64le)]
 
-    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/
-    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/ninja/
-    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/quadninja/
-
     ### Ninja bins
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/  # [linux and (x86_64 or ppc64le)]
