@@ -34,8 +34,8 @@ build:
     - cp -a source $PREFIX/MG5_aMC
 
     # Use packaged versions of vendored code
-    # TODO: CutTools
-    # IREGI
+    ## TODO: CutTools
+    ## IREGI
     # TODO: Compare https://github.com/mg5amcnlo/mg5amcnlo/blob/3.x/vendor/IREGI/src/oneloop/avh_olo_foriregi.f90 against avh_olo.f90 in oneloop
     - rm -rf $PREFIX/MG5_aMC/vendor/IREGI
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src
@@ -45,34 +45,59 @@ build:
     - ln -s $PREFIX/lib/libff.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql
     - ln -s $PREFIX/lib/libqcdloop.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/
-    # TODO: StdHEP
+    ## TODO: StdHEP
 
     # Symlink libraries to HEPTools/ directory tree as mg5amcnlo looks there
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/lib
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/include
-    # OneLOop
+    ## OneLOop
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/oneloop
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/oneloop/
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
-    - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; done
-    - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
-    # Ninja
+    - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
+    ## Ninja
+    ## c.f. https://github.com/conda-forge/ninja-hep-ph-feedstock/issues/3
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin  # [linux and (x86_64 or ppc64le)]
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
+    # - mkdir -p $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib  # [linux and (x86_64 or ppc64le)]
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin  # [linux and (x86_64 or ppc64le)]
+
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+
+    - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
+
+    - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja  # [linux and (x86_64 or ppc64le)]
+
+    - for file in $PREFIX/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja # [linux and (x86_64 or ppc64le)]
+
+    # ERROR: Could not find the include directory for ninja, looking in $PREFIX/MG5_aMC/HEPTools/include.
+    # Generation carries on but you will need to edit the include path by hand in the makefiles.
+
+    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/
+    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/ninja/
+    - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/quadninja/
+
+
+
+    # - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
+    # - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    # - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    # - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
+    # # - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    # # - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    # # - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/  # [linux and (x86_64 or ppc64le)]
-    # Collier
+
+    ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/collier/
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/lib/
