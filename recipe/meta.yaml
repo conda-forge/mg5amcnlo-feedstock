@@ -58,13 +58,18 @@ build:
     - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
     # Ninja
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib  # [linux and (x86_64 or ppc64le)]
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include  # [linux and (x86_64 or ppc64le)]
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
-    - for file in $PREFIX/include/ninja/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
+    - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/  # [linux and (x86_64 or ppc64le)]
     # Collier
