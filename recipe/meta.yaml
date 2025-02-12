@@ -58,14 +58,15 @@ build:
     ## Ninja
     ## c.f. https://github.com/conda-forge/ninja-hep-ph-feedstock/issues/3
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin  # [linux and (x86_64 or ppc64le)]
-    # - mkdir -p $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include  # [linux and (x86_64 or ppc64le)]
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin  # [linux and (x86_64 or ppc64le)]
 
+    ### Ninja libs
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/  # [linux and (x86_64 or ppc64le)]
 
+    ### Ninja includes
     - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/  # [linux and (x86_64 or ppc64le)]
@@ -73,30 +74,17 @@ build:
     - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja  # [linux and (x86_64 or ppc64le)]
 
-    - for file in $PREFIX/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
-    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja # [linux and (x86_64 or ppc64le)]
-    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja # [linux and (x86_64 or ppc64le)]
-
-    # ERROR: Could not find the include directory for ninja, looking in $PREFIX/MG5_aMC/HEPTools/include.
-    # Generation carries on but you will need to edit the include path by hand in the makefiles.
+    - for file in $PREFIX/MG5_aMC/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja  # [linux and (x86_64 or ppc64le)]
 
     - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/
     - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/ninja/
     - ls -lhtra $PREFIX/MG5_aMC/HEPTools/include/quadninja/
 
-
-
-    # - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/; done  # [linux and (x86_64 or ppc64le)]
-    # - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    # - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    # - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja  # [linux and (x86_64 or ppc64le)]
-    # # - for file in $PREFIX/include/ninja/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done  # [linux and (x86_64 or ppc64le)]
-    # # - for file in $PREFIX/include/ninja/*.h; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-    # # - for file in $PREFIX/include/ninja/*.hh; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/ninja/; done  # [linux and (x86_64 or ppc64le)]
-
+    ### Ninja bins
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/  # [linux and (x86_64 or ppc64le)]
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/  # [linux and (x86_64 or ppc64le)]
-
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/collier/
