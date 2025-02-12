@@ -130,7 +130,7 @@ requirements:
     - oneloop-static  # [build_platform != target_platform]
     - iregi-static  # [build_platform != target_platform]
     - qcdloop-fortran-static  # [build_platform != target_platform]
-    - ninja-hep-ph-static  # [(build_platform != target_platform) and linux and (x86_64 or ppc64le)]
+    - ninja-hep-ph-static 1.1.*  # [(build_platform != target_platform) and linux and (x86_64 or ppc64le)]
     - collier-static  # [build_platform != target_platform]
   host:
     - python
@@ -144,7 +144,7 @@ requirements:
     - iregi-static
     - qcdloop-fortran-static
     # HEPTools
-    - ninja-hep-ph-static  # [linux and (x86_64 or ppc64le)]
+    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
@@ -169,7 +169,9 @@ requirements:
     - qcdloop-fortran-static
     # HEPTools
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
-    - ninja-hep-ph-static  # [linux and (x86_64 or ppc64le)]
+    # mg5amcnlo v3.5.7 requires ninja-hep-ph v1.1.0 and will fail to compile
+    # for ninja-hep-ph v1.2.0
+    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
     - ghostscript
 
