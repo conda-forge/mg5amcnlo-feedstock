@@ -134,7 +134,7 @@ requirements:
     - oneloop-static  # [build_platform != target_platform]
     - iregi-static  # [build_platform != target_platform]
     - qcdloop-fortran-static  # [build_platform != target_platform]
-    - ninja-hep-ph-static  # [(build_platform != target_platform) and (linux and (x86_64 or ppc64le))]
+    - ninja-hep-ph-static  # [(build_platform != target_platform) and linux and (x86_64 or ppc64le)]
     - collier-static  # [build_platform != target_platform]
   host:
     - python
