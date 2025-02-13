@@ -164,6 +164,7 @@ requirements:
     - emela
     - lhapdf
     - ply
+    - bc  # Needed to run showering
     # MG5_aMC/vendor/ libraries
     # - cuttools-static
     # - mpfun90
