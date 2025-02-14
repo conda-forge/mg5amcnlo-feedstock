@@ -207,6 +207,9 @@ test:
     - test -f $PREFIX/MG5_aMC/input/mg5_configuration.txt
     - test -f $PREFIX/MG5_aMC/madgraph/LICENSE
 
+    # Check vendored libraries got built
+    - test -f $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
+
     - echo -e "\n# Checking mg5_configuration.txt"
     - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
