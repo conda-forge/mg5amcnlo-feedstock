@@ -131,7 +131,7 @@ requirements:
     - emela  # [build_platform != target_platform]
     - lhapdf  # [build_platform != target_platform]
     - oneloop-static  # [build_platform != target_platform]
-    - iregi-static 1.1.0  # [build_platform != target_platform]
+    - iregi-static 1.1.0.*  # [build_platform != target_platform]
     - qcdloop-fortran-static  # [build_platform != target_platform]
     - ninja-hep-ph-static 1.1.*  # [(build_platform != target_platform) and linux and (x86_64 or ppc64le)]
     - collier-static  # [build_platform != target_platform]
@@ -144,7 +144,7 @@ requirements:
     - lhapdf
     # Provide targets for symlink
     - oneloop-static
-    - iregi-static 1.1.0
+    - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
     - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
@@ -169,7 +169,7 @@ requirements:
     # - cuttools-static
     # - mpfun90
     - oneloop-static
-    - iregi-static 1.1.0
+    - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
