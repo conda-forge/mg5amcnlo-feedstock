@@ -35,6 +35,8 @@ build:
 
     # Use packaged versions of vendored code
     ## TODO: CutTools
+    # For now use the vendored version
+    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
     ## IREGI
     # TODO: Compare https://github.com/mg5amcnlo/mg5amcnlo/blob/3.x/vendor/IREGI/src/oneloop/avh_olo_foriregi.f90 against avh_olo.f90 in oneloop
     - rm -rf $PREFIX/MG5_aMC/vendor/IREGI
@@ -113,7 +115,11 @@ build:
     # conda-build intentionally compiles .pyc files, so keep those.
     # c.f. https://docs.conda.io/projects/conda-build/en/stable/resources/define-metadata.html#skip-compiling-some-py-files-into-pyc-files
     - echo "exit" | mg5_aMC
-    - rm py.py
+
+    # Compile the vendored CutTools
+    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
+    # Provides $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
+    - echo 'generate p p > e+ ve [QCD]; output _compile_cuttools' | mg5_aMC
 
 requirements:
   build:
@@ -166,8 +172,6 @@ requirements:
     - ply
     - bc  # Needed to run showering
     # MG5_aMC/vendor/ libraries
-    # - cuttools-static
-    # - mpfun90
     - oneloop-static
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
