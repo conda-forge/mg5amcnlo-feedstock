@@ -45,7 +45,8 @@ build:
     - cd $PREFIX/MG5_aMC/vendor/CutTools
     - echo -e "\n# Compiling CutTools"
     - make FC=$FC FFLAGS="-fPIC -fno-automatic -O2 -funroll-all-loops $FFLAGS"
-    - make clean
+    # Running 'make clean' deletes the files we want, so manually clean up
+    - find . -name "*.o" -exec rm {} +
     - cd -
 
     ## IREGI
