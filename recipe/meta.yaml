@@ -44,7 +44,8 @@ build:
     # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L73
     - cd $PREFIX/MG5_aMC/vendor/CutTools
     - echo -e "\n# Compiling CutTools"
-    - make FC=$FC
+    - make FC=$FC FFLAGS="-fPIC -fno-automatic -O2 -funroll-all-loops $FFLAGS"
+    - make clean
     - cd -
 
     ## IREGI
@@ -62,7 +63,11 @@ build:
     # TODO: Package this
     # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L99
     - cd $PREFIX/MG5_aMC/vendor/StdHEP
+    # Patch makefile to ensure conda-forge FFLAGS and CFLAGS are used
+    - sed -i "s|FFLAGS += -std=legacy|FFLAGS += -std=legacy -ffixed-line-length-none $FFLAGS|g" makefile
+    - sed -i "s|CFLAGS += -Wno-implicit-function-declaration|CFLAGS += -Wno-implicit-function-declaration $CFLAGS|g" makefile
     - echo -e "\n# Compiling StdHEP"
+    - make all FC=$FC F77=$FC CC=$CC --jobs=$CPU_COUNT
     - make clean
     - cd -
 
