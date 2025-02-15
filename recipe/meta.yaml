@@ -43,15 +43,8 @@ build:
     # Provides $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
     # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L73
     - cd $PREFIX/MG5_aMC/vendor/CutTools
-    - echo "Compiling CutTools"
+    - echo -e "\n# Compiling CutTools"
     - make FC=$FC
-    - cd -
-
-    # Compile the vendored StdHEP
-    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L99
-    - cd $PREFIX/MG5_aMC/vendor/StdHEP
-    - echo "Compiling StdHEP"
-    - make clean
     - cd -
 
     ## IREGI
@@ -64,7 +57,14 @@ build:
     - ln -s $PREFIX/lib/libff.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/
     - mkdir -p $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql
     - ln -s $PREFIX/lib/libqcdloop.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/
-    ## TODO: StdHEP
+
+    # Compile the vendored StdHEP
+    # TODO: Package this
+    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L99
+    - cd $PREFIX/MG5_aMC/vendor/StdHEP
+    - echo -e "\n# Compiling StdHEP"
+    - make clean
+    - cd -
 
     # Symlink libraries to HEPTools/ directory tree as mg5amcnlo looks there
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/lib
