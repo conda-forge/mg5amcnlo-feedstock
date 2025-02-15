@@ -222,6 +222,14 @@ test:
     # Check vendored libraries got built
     - test -f $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
 
+    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/libiregi.a
+    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/libff.a
+    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/libqcdloop.a
+
+    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhep.a
+    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
+    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
+
     - echo -e "\n# Checking mg5_configuration.txt"
     - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
