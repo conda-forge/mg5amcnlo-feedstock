@@ -33,17 +33,13 @@ build:
     # Need to use -a to preserve symlinks
     - cp -a source $PREFIX/MG5_aMC
 
-    # Use packaged versions of vendored code
-    ## TODO: CutTools
-    # For now use the vendored version
-    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
-
-    # Compile the vendored CutTools
+    # TODO: Use packaged versions of vendored code (CutTools, StdHEP)
+    # For now, compile the vendored CutTools
     # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
     # Provides $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
-    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L73
     - cd $PREFIX/MG5_aMC/vendor/CutTools
     - echo -e "\n# Compiling CutTools"
+    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L73
     - make FC=$FC FFLAGS="-fPIC -fno-automatic -O2 -funroll-all-loops $FFLAGS"
     # Running 'make clean' deletes the files we want, so manually clean up
     - find . -name "*.o" -exec rm {} +
@@ -61,13 +57,13 @@ build:
     - ln -s $PREFIX/lib/libqcdloop.a $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/
 
     # Compile the vendored StdHEP
-    # TODO: Package this
-    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L99
+    # TODO: Package this (https://github.com/conda-forge/staged-recipes/pull/29118)
     - cd $PREFIX/MG5_aMC/vendor/StdHEP
     # Patch makefile to ensure conda-forge FFLAGS and CFLAGS are used
     - sed -i "s|FFLAGS += -std=legacy|FFLAGS += -std=legacy -ffixed-line-length-none $FFLAGS|g" makefile
     - sed -i "s|CFLAGS += -Wno-implicit-function-declaration|CFLAGS += -Wno-implicit-function-declaration $CFLAGS|g" makefile
     - echo -e "\n# Compiling StdHEP"
+    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L84
     - make all FC=$FC F77=$FC CC=$CC --jobs=$CPU_COUNT
     - make clean
     - cd -
