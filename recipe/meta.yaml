@@ -37,6 +37,23 @@ build:
     ## TODO: CutTools
     # For now use the vendored version
     # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
+
+    # Compile the vendored CutTools
+    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
+    # Provides $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
+    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L73
+    - cd $PREFIX/MG5_aMC/vendor/CutTools
+    - echo "Compiling CutTools"
+    - make FC=$FC
+    - cd -
+
+    # Compile the vendored StdHEP
+    # c.f. https://github.com/mg5amcnlo/mg5amcnlo/blob/3d6799de1bcabee5173e8a3711f657a5cd5940cf/Template/NLO/Source/makefile#L99
+    - cd $PREFIX/MG5_aMC/vendor/StdHEP
+    - echo "Compiling StdHEP"
+    - make clean
+    - cd -
+
     ## IREGI
     # TODO: Compare https://github.com/mg5amcnlo/mg5amcnlo/blob/3.x/vendor/IREGI/src/oneloop/avh_olo_foriregi.f90 against avh_olo.f90 in oneloop
     - rm -rf $PREFIX/MG5_aMC/vendor/IREGI
@@ -115,11 +132,6 @@ build:
     # conda-build intentionally compiles .pyc files, so keep those.
     # c.f. https://docs.conda.io/projects/conda-build/en/stable/resources/define-metadata.html#skip-compiling-some-py-files-into-pyc-files
     - echo "exit" | mg5_aMC
-
-    # Compile the vendored CutTools
-    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3#issuecomment-2660481386
-    # Provides $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
-    - echo 'generate p p > e+ ve [QCD]; output _compile_cuttools' | mg5_aMC
 
 requirements:
   build:
@@ -223,6 +235,7 @@ test:
 
     - mg5_aMC $RECIPE_DIR/tutorial.mg5
 
+    - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt
     - mg5_aMC $RECIPE_DIR/tutorial_amc-at-nlo.mg5  # [build_platform == target_platform]
 
 about:
