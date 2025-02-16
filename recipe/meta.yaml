@@ -245,7 +245,7 @@ test:
 
     - mg5_aMC $RECIPE_DIR/tutorial.mg5
 
-    - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt
+    - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt  # [build_platform == target_platform]
     - mg5_aMC $RECIPE_DIR/tutorial_amc-at-nlo.mg5  # [build_platform == target_platform]
 
 about:
