@@ -147,14 +147,6 @@ requirements:
     - python  # [build_platform != target_platform]
     - sed
     - grep
-    - fastjet-cxx  # [build_platform != target_platform]
-    - emela  # [build_platform != target_platform]
-    - lhapdf  # [build_platform != target_platform]
-    - oneloop-static  # [build_platform != target_platform]
-    - iregi-static 1.1.0.*  # [build_platform != target_platform]
-    - qcdloop-fortran-static  # [build_platform != target_platform]
-    - ninja-hep-ph-static 1.1.*  # [(build_platform != target_platform) and linux and (x86_64 or ppc64le)]
-    - collier-static  # [build_platform != target_platform]
   host:
     - python
     - six
