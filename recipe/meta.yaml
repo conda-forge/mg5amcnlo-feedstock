@@ -73,6 +73,7 @@ build:
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/include
     ## OneLOop
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/oneloop
+    - echo -e "\n# Symlinking OneLOop"
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/oneloop/
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
     - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
@@ -82,6 +83,7 @@ build:
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin
+    - echo -e "\n# Symlinking Ninja"
 
     ### Ninja libs
     - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/
@@ -105,13 +107,40 @@ build:
   {% endif %}
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
+    - echo -e "\n# Symlinking Collier"
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/collier/
     - ln -s $PREFIX/lib/libcollier.a $PREFIX/MG5_aMC/HEPTools/lib/
     - ln -s $PREFIX/include/collier.mod $PREFIX/MG5_aMC/HEPTools/collier/include/
     - ln -s $PREFIX/include/collier.mod $PREFIX/MG5_aMC/HEPTools/include/
 
-    # TODO: Add MG5aMC_PY8_interface
+    # Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
+    - echo -e "\n# Adding MG5aMC_PY8_interface"
+    - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
+    - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
+    - cd MG5aMC_PY8_interface
+    # FIXME: GET THIS FIXED IN Pythia8 feedstock!!! PATCH THIS OUT
+    # CXX is getting set to $BUILD_PREFIX/bin/g++ in the Makefile.inc
+    # - sed -i "s|$BUILD_PREFIX|$PREFIX|g" $PREFIX/share/Pythia8/examples/Makefile.inc
+    - sed -i "s|/home/conda/feedstock_root/build_artifacts/pythia8_1739928151691/_build_env|$PREFIX|g" $PREFIX/share/Pythia8/examples/Makefile.inc
+
+    - cat $PREFIX/share/Pythia8/examples/Makefile.inc
+    - echo "CXX=$CXX"
+    - sed -i 's/main89/main131/g' compile.py  # Needed for Pythia8 8.312
+
+    - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
+    - sed -i "s|CXX=$PREFIX|CXX=$BUILD_PREFIX|" $PREFIX/share/Pythia8/examples/Makefile.inc
+
+    - python compile.py $PREFIX
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
+    - cd ..
+    - ls -lhtra MG5aMC_PY8_interface/
+    - cp MG5aMC_PY8_interface/* $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/
+    - rm -rf MG5aMC_PY8_interface
+
+    # Restore Makefile.inc
+    - mv $PREFIX/share/Pythia8/examples/Makefile.inc.bak $PREFIX/share/Pythia8/examples/Makefile.inc
+    - cat $PREFIX/share/Pythia8/examples/Makefile.inc
 
     # Build configuration file be replacing placeholder values with PREFIX
     - cp $RECIPE_DIR/mg5_configuration.txt .
@@ -147,6 +176,8 @@ requirements:
     - python  # [build_platform != target_platform]
     - sed
     - grep
+    - curl  # for downloading MG5aMC_PY8_interface
+    - tar  # for extracting MG5aMC_PY8_interface
   host:
     - python
     - six
@@ -161,6 +192,10 @@ requirements:
     # HEPTools
     - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
+    # - pythia8 8.311.*
+    - pythia8 8.312.*
+    - hepmc2
+    - hepmc3
   run:
     # mg5amcnlo is a code generator and so requires a build system at runtime
     - cxx-compiler
@@ -187,6 +222,11 @@ requirements:
     # for ninja-hep-ph v1.2.0
     - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
+    # - pythia8 8.311.*
+    - pythia8 8.312.*
+    - hepmc2
+    - hepmc3
+    - libzlib  # Needed by MG5aMC_PY8_interface
     - ghostscript
 
 test:
@@ -223,6 +263,18 @@ test:
     - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhep.a
     - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
     - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
+
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/COMPATIBILITY
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5AMC_VERSION_ON_INSTALL
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5aMC_PY8_interface
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/Makefile_mg5amc_py8_interface_static
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MultiHist.h
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/PYTHIA8_VERSION_ON_INSTALL
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/SyscalcVeto.h
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/VERSION
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/get_pythia8_version.py
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/make_tarball.py
+    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/pythia8_version.cc
 
     - echo -e "\n# Checking mg5_configuration.txt"
     - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
