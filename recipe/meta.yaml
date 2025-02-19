@@ -223,6 +223,7 @@ requirements:
     - hepmc3
     - libzlib  # Needed by MG5aMC_PY8_interface
     - ghostscript
+    - gnuplot
 
 test:
   files:
