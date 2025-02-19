@@ -13,7 +13,7 @@ source:
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
   skip: true  # [py<37 or py>311 or win]
-  number: 3
+  number: 4
   script:
     # Remove unnecessary files
     - rm -r source/.github
@@ -141,7 +141,8 @@ build:
     - cp $RECIPE_DIR/mg5_configuration.txt .
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
-    - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
+    # Use $CXX_FOR_BUILD as macOS builds don't use a full path for $CXX
+    - sed -i "s|REPLACE_WITH_BASENAME_CXX|$(basename $CXX_FOR_BUILD)|g" mg5_configuration.txt
     # c.f. https://github.com/conda/conda-build/issues/5618
   {% if (linux and (x86_64 or ppc64le)) %}
     - sed -i '/ninja =/s/^# //g' mg5_configuration.txt
@@ -274,6 +275,9 @@ test:
 
     - echo -e "\n# Checking mg5_configuration.txt"
     - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
+
+    - echo -e "\n# Checking $PREFIX/share/Pythia8/examples/Makefile.inc"
+    - cat $PREFIX/share/Pythia8/examples/Makefile.inc
 
     - mg5_aMC --help
 
