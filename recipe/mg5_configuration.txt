@@ -43,7 +43,7 @@ f2py_compiler_py3 = REPLACE_WITH_PREFIX/bin/f2py
 #! Prefered C++ Compiler
 #! If None: try to find g++ or clang on the system
 #!
-cpp_compiler = REPLACE_WITH_PREFIX/bin/REPLACE_WITH_BASENAME_GXX
+cpp_compiler = REPLACE_WITH_PREFIX/bin/REPLACE_WITH_BASENAME_CXX
 
 #! Prefered Text Editor
 #!  Default: use the shell default Editor
