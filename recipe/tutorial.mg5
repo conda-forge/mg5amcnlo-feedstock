@@ -8,3 +8,9 @@ add process p p > W+ j, W+ > l+ vl @2
 output MY_FIRST_MG5_RUN
 
 launch MY_FIRST_MG5_RUN
+  # Use PYTHIA8 for the shower/hadronization
+  shower=Pythia8
+  # Generate 1000 events
+  set nevents 1000
+  # Set random seed
+  set iseed 0
