@@ -115,34 +115,29 @@ build:
 
     # Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
-    - echo -e "\n# Adding MG5aMC_PY8_interface"
-    - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
-    - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
-    - cd MG5aMC_PY8_interface
-    # FIXME: GET THIS FIXED IN Pythia8 feedstock!!! PATCH THIS OUT
-    # CXX is getting set to $BUILD_PREFIX/bin/g++ in the Makefile.inc
-    # - sed -i "s|$BUILD_PREFIX|$PREFIX|g" $PREFIX/share/Pythia8/examples/Makefile.inc
-    - sed -i "s|/home/conda/feedstock_root/build_artifacts/pythia8_1739928151691/_build_env|$PREFIX|g" $PREFIX/share/Pythia8/examples/Makefile.inc
 
-    - cat $PREFIX/share/Pythia8/examples/Makefile.inc
-    - echo "CXX=$CXX"
-    - sed -i 's/main89/main131/g' compile.py  # Needed for Pythia8 8.312
-
+    # Need the CXX in Makefile.inc to be available _during_ the build, and so
+    # need to inject the $BUILD_PREFIX CXX, but restore to the $PREFIX CXX
+    # after so that at runtime the correct CXX is used.
     - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
     - sed -i "s|CXX=$PREFIX|CXX=$BUILD_PREFIX|" $PREFIX/share/Pythia8/examples/Makefile.inc
 
+    - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
+    - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
+    - cd MG5aMC_PY8_interface
+    - echo -e "\n# Compiling MG5aMC_PY8_interface"
     - python compile.py $PREFIX
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
-    - ls -lhtra MG5aMC_PY8_interface/
+    # TODO: Determine the minimum required set of files to install
     - cp MG5aMC_PY8_interface/* $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/
     - rm -rf MG5aMC_PY8_interface
 
     # Restore Makefile.inc
     - mv $PREFIX/share/Pythia8/examples/Makefile.inc.bak $PREFIX/share/Pythia8/examples/Makefile.inc
-    - cat $PREFIX/share/Pythia8/examples/Makefile.inc
 
     # Build configuration file be replacing placeholder values with PREFIX
+    - echo -e "\n# Configuring $PREFIX/MG5_aMC/input/mg5_configuration.txt"
     - cp $RECIPE_DIR/mg5_configuration.txt .
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
@@ -192,8 +187,7 @@ requirements:
     # HEPTools
     - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
-    # - pythia8 8.311.*
-    - pythia8 8.312.*
+    - pythia8 8.311.*
     - hepmc2
     - hepmc3
   run:
@@ -222,8 +216,9 @@ requirements:
     # for ninja-hep-ph v1.2.0
     - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
     - collier-static
-    # - pythia8 8.311.*
-    - pythia8 8.312.*
+    # mg5amcnlo v3.5.7 requires pythia v8.311 for MG5aMC_PY8_interface to work
+    # without edits to compile.py
+    - pythia8 8.311.*
     - hepmc2
     - hepmc3
     - libzlib  # Needed by MG5aMC_PY8_interface
