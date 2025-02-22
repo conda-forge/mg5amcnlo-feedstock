@@ -77,7 +77,7 @@ build:
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/oneloop/
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
     - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
-  {% if (linux and (x86_64 or ppc64le)) %}
+
     ## Ninja
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
@@ -104,7 +104,7 @@ build:
     ### Ninja bins
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/
     - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/
-  {% endif %}
+
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - echo -e "\n# Symlinking Collier"
@@ -143,10 +143,6 @@ build:
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
     # Use $CXX_FOR_BUILD as macOS builds don't use a full path for $CXX
     - sed -i "s|REPLACE_WITH_BASENAME_CXX|$(basename $CXX_FOR_BUILD)|g" mg5_configuration.txt
-    # c.f. https://github.com/conda/conda-build/issues/5618
-  {% if (linux and (x86_64 or ppc64le)) %}
-    - sed -i '/ninja =/s/^# //g' mg5_configuration.txt
-  {% endif %}
     - mv mg5_configuration.txt $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
     # Setup links
@@ -186,7 +182,7 @@ requirements:
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
-    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
+    - ninja-hep-ph-static 1.1.*
     - collier-static
     - pythia8 8.311.*
     - hepmc2
@@ -212,10 +208,9 @@ requirements:
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
-    # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # mg5amcnlo v3.5.7 requires ninja-hep-ph v1.1.0 and will fail to compile
     # for ninja-hep-ph v1.2.0
-    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
+    - ninja-hep-ph-static 1.1.*
     - collier-static
     # mg5amcnlo v3.5.7 requires pythia v8.311 for MG5aMC_PY8_interface to work
     # without edits to compile.py
