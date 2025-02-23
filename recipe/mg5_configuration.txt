@@ -43,7 +43,7 @@ f2py_compiler_py3 = REPLACE_WITH_PREFIX/bin/f2py
 #! Prefered C++ Compiler
 #! If None: try to find g++ or clang on the system
 #!
-cpp_compiler = REPLACE_WITH_PREFIX/bin/REPLACE_WITH_BASENAME_GXX
+cpp_compiler = REPLACE_WITH_PREFIX/bin/REPLACE_WITH_BASENAME_CXX
 
 #! Prefered Text Editor
 #!  Default: use the shell default Editor
@@ -211,7 +211,7 @@ eMELA = REPLACE_WITH_PREFIX/bin/eMELA-config
 #! Set the Ninja directory containing ninja's library
 #! if '' or None: disabling ninja
 #! if ninja=/PATH/TO/ninja/lib: use that specific installation path for ninja
-# ninja = ./HEPTools/lib
+ninja = ./HEPTools/lib
 
 #! Set the COLLIER directory containing COLLIER's library
 #! if '' or None: disabling COLLIER
