@@ -107,7 +107,8 @@ build:
 
     ### Ninja VERSION files
     # c.f. https://github.com/mg5amcnlo/HEPToolsInstallers/commit/4e931d79af6a9f59d67e1951179f4aad7cbc1547
-    - $PREFIX/bin/ninja-config --version > $PREFIX/MG5_aMC/HEPTools/ninja/VERSION
+    # FIXME: osx-arm64 raises 'Bad CPU type in executable' so will need to find an alternative way later.
+    - $PREFIX/bin/ninja-config --version > $PREFIX/MG5_aMC/HEPTools/ninja/VERSION  # [not (osx and arm64)]
 
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
@@ -261,7 +262,7 @@ test:
     - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
     - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
 
-    - test -f $PREFIX/MG5_aMC/HEPTools/ninja/VERSION
+    - test -f $PREFIX/MG5_aMC/HEPTools/ninja/VERSION  # [not (osx and arm64)]
 
     - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/COMPATIBILITY
     - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5AMC_VERSION_ON_INSTALL
