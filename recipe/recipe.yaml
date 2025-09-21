@@ -1,19 +1,22 @@
-{% set name = "mg5amcnlo" %}
-{% set version = "3.5.7" %}
+schema_version: 1
+
+context:
+  name: mg5amcnlo
+  version: "3.5.7"
 
 package:
-  name: {{ name }}
-  version: {{ version }}
+  name: ${{ name }}
+  version: ${{ version }}
 
 source:
-  - url: https://github.com/hep-packaging-coordination/mg5amcnlo-release-mirror/releases/download/{{ version }}/MG5_aMC_v{{ version }}.tar.gz
+  - url: https://github.com/hep-packaging-coordination/mg5amcnlo-release-mirror/releases/download/${{ version }}/MG5_aMC_v${{ version }}.tar.gz
     sha256: ca3e027f078438318bd4143a102aebc2d51358f537b5d52bbc574fe49a6a901e
-    folder: source
+    target_directory: source
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  skip: true  # [py<37 or py>311 or win]
-  number: 3
+  number: 4
+  skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
     # Remove unnecessary files
     - rm -r source/.github
@@ -77,34 +80,31 @@ build:
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/oneloop/
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
     - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
-  {% if (linux and (x86_64 or ppc64le)) %}
-    ## Ninja
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include
-    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin
-    - echo -e "\n# Symlinking Ninja"
 
-    ### Ninja libs
-    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/
-    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/
+    - if: (linux and (x86_64 or ppc64le))
+      then:
+        ## Ninja
+        - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin
+        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
+        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include
+        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin
+        - echo -e "\n# Symlinking Ninja"
+        ### Ninja libs
+        - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/
+        - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/
+        ### Ninja includes
+        - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+        - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+        - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+        - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja
+        - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja
+        - for file in $PREFIX/MG5_aMC/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
+        - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja
+        - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja
+        ### Ninja bins
+        - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/
+        - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/
 
-    ### Ninja includes
-    - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-    - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-    - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-
-    - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja
-    - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja
-
-    - for file in $PREFIX/MG5_aMC/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
-    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja
-    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja
-
-    ### Ninja bins
-    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/
-    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/
-  {% endif %}
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
     - echo -e "\n# Symlinking Collier"
@@ -121,7 +121,6 @@ build:
     # after so that at runtime the correct CXX is used.
     - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
     - sed -i "s|CXX=$PREFIX|CXX=$BUILD_PREFIX|" $PREFIX/share/Pythia8/examples/Makefile.inc
-
     - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
     - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
     - cd MG5aMC_PY8_interface
@@ -135,17 +134,15 @@ build:
 
     # Restore Makefile.inc
     - mv $PREFIX/share/Pythia8/examples/Makefile.inc.bak $PREFIX/share/Pythia8/examples/Makefile.inc
-
     # Build configuration file be replacing placeholder values with PREFIX
     - echo -e "\n# Configuring $PREFIX/MG5_aMC/input/mg5_configuration.txt"
     - cp $RECIPE_DIR/mg5_configuration.txt .
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
-    # c.f. https://github.com/conda/conda-build/issues/5618
-  {% if (linux and (x86_64 or ppc64le)) %}
-    - sed -i '/ninja =/s/^# //g' mg5_configuration.txt
-  {% endif %}
+    # Ninja settings in mg5_configuration.txt
+    - if: (linux and (x86_64 or ppc64le))
+      then: sed -i '/ninja =/s/^# //g' mg5_configuration.txt
     - mv mg5_configuration.txt $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
     # Setup links
@@ -161,14 +158,16 @@ build:
 
 requirements:
   build:
-    - {{ stdlib('c') }}
+    - ${{ stdlib('c') }}
     # Compilers needed to set names in mg5_configuration.txt and will be
     # used in the future along with make when bugs with Pythia8 are fixed
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
     - make
-    - cross-python_{{ target_platform }}  # [build_platform != target_platform]
-    - python  # [build_platform != target_platform]
+    - if: build_platform != target_platform
+      then:
+        - cross-python_${{ target_platform }}
+        - python
     - sed
     - grep
     - curl  # for downloading MG5aMC_PY8_interface
@@ -185,7 +184,8 @@ requirements:
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
-    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
+    - if: linux and (x86_64 or ppc64le)
+      then: ninja-hep-ph-static 1.1.*
     - collier-static
     - pythia8 8.311.*
     - hepmc2
@@ -214,7 +214,8 @@ requirements:
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # mg5amcnlo v3.5.7 requires ninja-hep-ph v1.1.0 and will fail to compile
     # for ninja-hep-ph v1.2.0
-    - ninja-hep-ph-static 1.1.*  # [linux and (x86_64 or ppc64le)]
+    - if: linux and (x86_64 or ppc64le)
+      then: ninja-hep-ph-static 1.1.*
     - collier-static
     # mg5amcnlo v3.5.7 requires pythia v8.311 for MG5aMC_PY8_interface to work
     # without edits to compile.py
@@ -225,72 +226,77 @@ requirements:
     - ghostscript
     - gnuplot
 
-test:
-  files:
-    - $RECIPE_DIR/tutorial.mg5
-    - $RECIPE_DIR/tutorial_amc-at-nlo.mg5
-  commands:
-    - test -d $PREFIX/MG5_aMC
-    - test -d $PREFIX/MG5_aMC/aloha
-    - test -d $PREFIX/MG5_aMC/bin
-    - test -d $PREFIX/MG5_aMC/HELAS
-    - test -d $PREFIX/MG5_aMC/input
-    - test -d $PREFIX/MG5_aMC/madgraph
-    - test -d $PREFIX/MG5_aMC/MadSpin
-    - test -d $PREFIX/MG5_aMC/mg5decay
-    - test -d $PREFIX/MG5_aMC/models
-    - test -d $PREFIX/MG5_aMC/PLUGIN
-    - test -d $PREFIX/MG5_aMC/Template
-    - test -d $PREFIX/MG5_aMC/vendor
+tests:
+  - package_contents:
+      files:
+        - MG5_aMC/aloha/*
+        - MG5_aMC/bin/*
+        - MG5_aMC/HELAS/*
+        - MG5_aMC/input/*
+        - MG5_aMC/madgraph/*
+        - MG5_aMC/MadSpin/*
+        - MG5_aMC/mg5decay/*
+        - MG5_aMC/models/*
+        - MG5_aMC/PLUGIN/*
+        - MG5_aMC/Template/*
+        - MG5_aMC/vendor/*
 
-    - test -f $PREFIX/MG5_aMC/proc_card.dat
-    - test -f $PREFIX/MG5_aMC/VERSION
-    - test -f $PREFIX/bin/mg5_aMC
-    - test -f $PREFIX/MG5_aMC/input/mg5_configuration.txt
-    - test -f $PREFIX/MG5_aMC/madgraph/LICENSE
+        - MG5_aMC/proc_card.dat
+        - MG5_aMC/VERSION
+        - MG5_aMC/input/mg5_configuration.txt
+        - MG5_aMC/madgraph/LICENSE
 
-    # Check vendored libraries got built
-    - test -f $PREFIX/MG5_aMC/vendor/CutTools/includects/libcts.a
+        # Check vendored libraries got built
+        - MG5_aMC/vendor/CutTools/includects/libcts.a
 
-    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/libiregi.a
-    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ff/libff.a
-    - test -f $PREFIX/MG5_aMC/vendor/IREGI/src/qcdloop/ql/libqcdloop.a
+        - MG5_aMC/vendor/IREGI/src/libiregi.a
+        - MG5_aMC/vendor/IREGI/src/qcdloop/ff/libff.a
+        - MG5_aMC/vendor/IREGI/src/qcdloop/ql/libqcdloop.a
 
-    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhep.a
-    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
-    - test -f $PREFIX/MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
+        - MG5_aMC/vendor/StdHEP/lib/libstdhep.a
+        - MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
+        - MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
 
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/COMPATIBILITY
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5AMC_VERSION_ON_INSTALL
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5aMC_PY8_interface
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/Makefile_mg5amc_py8_interface_static
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/MultiHist.h
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/PYTHIA8_VERSION_ON_INSTALL
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/SyscalcVeto.h
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/VERSION
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/get_pythia8_version.py
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/make_tarball.py
-    - test -f $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/pythia8_version.cc
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/COMPATIBILITY
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5AMC_VERSION_ON_INSTALL
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/MG5aMC_PY8_interface
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/Makefile_mg5amc_py8_interface_static
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/MultiHist.h
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/PYTHIA8_VERSION_ON_INSTALL
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/SyscalcVeto.h
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/VERSION
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/get_pythia8_version.py
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/make_tarball.py
+        - MG5_aMC/HEPTools/MG5aMC_PY8_interface/pythia8_version.cc
+      bin:
+        - mg5_aMC
+  - files:
+      recipe:
+        - tutorial.mg5
+        - tutorial_amc-at-nlo.mg5
+    script:
+      - echo -e "\n# Checking mg5_configuration.txt"
+      - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
-    - echo -e "\n# Checking mg5_configuration.txt"
-    - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
+      - mg5_aMC --help
 
-    - mg5_aMC --help
+      - echo "exit" | mg5_aMC
 
-    - echo "exit" | mg5_aMC
+      # Download NNPDF23_lo_as_0130_qed in advance to avoid long output in CI logs
+      # Somehow downloading in advance causes a compilation error on x86 Linux only in CI
+      - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt
 
-    # Download NNPDF23_lo_as_0130_qed in advance to avoid long output in CI logs
-    # Somehow downloading in advance causes a compilation error on x86 Linux only in CI
-    - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt
+      - mg5_aMC ./tutorial.mg5
+      - ls -lhtra
 
-    - mg5_aMC $RECIPE_DIR/tutorial.mg5
-
-    - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt  # [build_platform == target_platform]
-    - mg5_aMC $RECIPE_DIR/tutorial_amc-at-nlo.mg5  # [build_platform == target_platform]
+      - if: build_platform == target_platform
+        then:
+          - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt
+          - mg5_aMC ./tutorial_amc-at-nlo.mg5
+          - ls -lhtra
 
 about:
-  home: https://github.com/mg5amcnlo/mg5amcnlo
-  summary: 'MadGraph5_aMC@NLO'
+  summary: MadGraph5_aMC@NLO
   description: |
     MadGraph5_aMC@NLO is a framework that aims at providing all the elements
     necessary for SM and BSM phenomenology, such as the computations of cross
@@ -309,9 +315,9 @@ about:
     3.2.0, the latter include Initial State Radiation and beamstrahlung effects.
   # modified University of Illinois/NCSA license
   license: LicenseRef-NCSA
-  license_family: OTHER
   license_file: source/LICENSE
-  dev_url: https://github.com/mg5amcnlo/mg5amcnlo
+  homepage: https://github.com/mg5amcnlo/mg5amcnlo
+  repository: https://github.com/mg5amcnlo/mg5amcnlo
 
 extra:
   recipe-maintainers:
