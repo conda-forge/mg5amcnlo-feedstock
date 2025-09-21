@@ -151,6 +151,21 @@ build:
     - mkdir -p $PREFIX/share/mg5_aMC
     - ln -s $PREFIX/MG5_aMC/proc_card.dat $PREFIX/share/mg5_aMC/proc_card.dat
 
+    # Copy activate and deactivate scripts
+    # The scripts are executed in lexicographical order, so use 999- to ensure
+    # last to manipulate FFLAGS
+    - mkdir -p $PREFIX/etc/conda/activate.d
+    - cp "${RECIPE_DIR}/activate.sh" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.sh"
+    - cp "${RECIPE_DIR}/activate.csh" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.csh"
+    - cp "${RECIPE_DIR}/activate.fish" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.fish"
+
+    - mkdir -p $PREFIX/etc/conda/deactivate.d
+    - cp "${RECIPE_DIR}/deactivate.sh" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.sh"
+    - cp "${RECIPE_DIR}/deactivate.csh" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.csh"
+    - cp "${RECIPE_DIR}/deactivate.fish" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.fish"
+    - ls -lhtra $PREFIX/etc/conda/activate.d/
+    - ls -lhtra $PREFIX/etc/conda/deactivate.d/
+
     # Generate initial files
     # conda-build intentionally compiles .pyc files, so keep those.
     # c.f. https://docs.conda.io/projects/conda-build/en/stable/resources/define-metadata.html#skip-compiling-some-py-files-into-pyc-files
@@ -286,12 +301,14 @@ tests:
       # Somehow downloading in advance causes a compilation error on x86 Linux only in CI
       - lhapdf install NNPDF23_lo_as_0130_qed &> download_log.txt
 
+      - echo -e "\n# Running tutorial.mg5"
       - mg5_aMC ./tutorial.mg5
       - ls -lhtra
 
       - if: build_platform == target_platform
         then:
           - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt
+          - echo -e "\n# Running tutorial_amc-at-nlo.mg5"
           - mg5_aMC ./tutorial_amc-at-nlo.mg5
           - ls -lhtra
 
