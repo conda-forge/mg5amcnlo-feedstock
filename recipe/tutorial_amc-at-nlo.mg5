@@ -1,3 +1,5 @@
+set crash_on_error True
+
 generate p p > e+ ve [QCD]
 
 # add a second process
