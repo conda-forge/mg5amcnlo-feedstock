@@ -140,6 +140,8 @@ build:
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
+    # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/13
+    - sed -i "s|# automatic_html_opening = True|automatic_html_opening = False|g" mg5_configuration.txt
     # Ninja settings in mg5_configuration.txt
     - if: (linux and (x86_64 or ppc64le))
       then: sed -i '/ninja =/s/^# //g' mg5_configuration.txt
