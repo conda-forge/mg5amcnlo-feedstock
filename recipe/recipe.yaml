@@ -15,6 +15,7 @@ source:
     patches:
       # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/12
       - remove-cuttools-compiler-requirement.patch
+      - add-libtirpc-to-nlo-extralibs-for-xdr.patch
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
@@ -230,6 +231,7 @@ requirements:
     - oneloop-static
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
+    - libtirpc  # Needed for XDR library symbols used by StdHEP for NLO
     # HEPTools
     # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
     # mg5amcnlo v3.5.7 requires ninja-hep-ph v1.1.0 and will fail to compile
