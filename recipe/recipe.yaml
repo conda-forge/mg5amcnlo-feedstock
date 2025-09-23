@@ -12,6 +12,9 @@ source:
   - url: https://github.com/hep-packaging-coordination/mg5amcnlo-release-mirror/releases/download/${{ version }}/MG5_aMC_v${{ version }}.tar.gz
     sha256: ca3e027f078438318bd4143a102aebc2d51358f537b5d52bbc574fe49a6a901e
     target_directory: source
+    patches:
+      # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/12
+      - remove-cuttools-compiler-requirement.patch
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
