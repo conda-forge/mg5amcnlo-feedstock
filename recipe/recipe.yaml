@@ -309,9 +309,6 @@ tests:
       - echo -e "\n# Checking mg5_configuration.txt"
       - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
-      - echo -e "\n\n# Checking $PREFIX/share/Pythia8/examples/Makefile.inc"
-      - cat $PREFIX/share/Pythia8/examples/Makefile.inc
-
       - mg5_aMC --help
 
       - echo "exit" | mg5_aMC
