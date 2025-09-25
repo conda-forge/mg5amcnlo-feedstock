@@ -22,6 +22,10 @@ build:
   number: 6
   skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
+    - if: build_platform != target_platform
+      # Get an updated config.sub and config.guess
+      then: cp $BUILD_PREFIX/share/gnuconfig/config.* .
+
     # Remove unnecessary files
     - rm -r source/.github
     - rm -r source/tests
@@ -198,7 +202,9 @@ requirements:
       then:
         - cross-python_${{ target_platform }}
         - python
-        - zlib  # needed for PYTHIA8 compile
+        # for compiling MG5aMC_PY8_interface
+        - pkg-config
+        - gnuconfig
     - sed
     - grep
     - curl  # for downloading MG5aMC_PY8_interface
