@@ -143,7 +143,8 @@ build:
     - cp $RECIPE_DIR/mg5_configuration.txt .
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
     - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
-    - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
+    # Use $CXX_FOR_BUILD as macOS builds don't use a full path for $CXX
+    - sed -i "s|REPLACE_WITH_BASENAME_CXX|$(basename $CXX_FOR_BUILD)|g" mg5_configuration.txt
     # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/13
     - sed -i "s|# automatic_html_opening = True|automatic_html_opening = False|g" mg5_configuration.txt
     # Ninja settings in mg5_configuration.txt
@@ -299,6 +300,9 @@ tests:
     script:
       - echo -e "\n# Checking mg5_configuration.txt"
       - cat $PREFIX/MG5_aMC/input/mg5_configuration.txt
+
+      - echo -e "\n# Checking $PREFIX/share/Pythia8/examples/Makefile.inc"
+      - cat $PREFIX/share/Pythia8/examples/Makefile.inc
 
       - mg5_aMC --help
 
