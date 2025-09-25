@@ -126,6 +126,8 @@ build:
     - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
     - sed -i "/CXX=/c\CXX=$CXX_FOR_BUILD" $PREFIX/share/Pythia8/examples/Makefile.inc
     # Patch out use of libHEPMC3 for dynamic linking to work
+    # MG5aMC_PY8_interface.cc uses Pythia8Plugins/HepMC2.h only
+    # c.f. https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/MG5aMC_PY8_interface.cc#L11
     - sed -i "s/HEPMC3_USE=true/HEPMC3_USE=false/g" $PREFIX/share/Pythia8/examples/Makefile.inc
 
     - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
@@ -133,7 +135,7 @@ build:
     - cd MG5aMC_PY8_interface
     - echo -e "\n# Compiling MG5aMC_PY8_interface"
     # Use --pythia8_makefile for dynamic linking of libHepMC
-    # https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/compile.py#L35C3-L35C76
+    # https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/compile.py#L35
     - python compile.py --pythia8_makefile $PREFIX
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
