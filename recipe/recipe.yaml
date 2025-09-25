@@ -125,6 +125,8 @@ build:
     # $PREFIX CXX after so that at runtime the correct CXX is used.
     - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
     - sed -i "/CXX=/c\CXX=$CXX_FOR_BUILD" $PREFIX/share/Pythia8/examples/Makefile.inc
+    # Patch out use of libHEPMC3 for dynamic linking to work
+    - sed -i "s/HEPMC3_USE=true/HEPMC3_USE=false/g" $PREFIX/share/Pythia8/examples/Makefile.inc
 
     - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
     - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
