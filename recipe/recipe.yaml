@@ -121,8 +121,10 @@ build:
     - echo -e "\n# Configuring $PREFIX/MG5_aMC/input/mg5_configuration.txt"
     - cp $RECIPE_DIR/mg5_configuration.txt .
     - sed -i "s|REPLACE_WITH_PREFIX|$PREFIX|g" mg5_configuration.txt
-    - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename $FC)|g" mg5_configuration.txt
-    - sed -i "s|REPLACE_WITH_BASENAME_GXX|$(basename $GXX)|g" mg5_configuration.txt
+    # Ensure that the HOST compiler names that will be used at runtime are included
+    # (needed for cross-compilation)
+    - sed -i "s|REPLACE_WITH_BASENAME_FC|$(basename ${FC_FOR_BUILD//$BUILD/$HOST})|g" mg5_configuration.txt
+    - sed -i "s|REPLACE_WITH_BASENAME_CXX|$(basename ${CXX_FOR_BUILD//$BUILD/$HOST})|g" mg5_configuration.txt
     # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/13
     - sed -i "s|# automatic_html_opening = True|automatic_html_opening = False|g" mg5_configuration.txt
     # Ninja settings in mg5_configuration.txt
