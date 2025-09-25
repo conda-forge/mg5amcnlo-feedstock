@@ -19,7 +19,7 @@ source:
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  number: 4
+  number: 5
   skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
     # Remove unnecessary files
@@ -158,17 +158,17 @@ build:
     - ln -s $PREFIX/MG5_aMC/proc_card.dat $PREFIX/share/mg5_aMC/proc_card.dat
 
     # Copy activate and deactivate scripts
-    # The scripts are executed in lexicographical order, so use 999- to ensure
-    # last to manipulate FFLAGS
+    # The scripts are executed in lexicographical order, so use zzz- to ensure
+    # last to manipulate FFLAGS (lowercase letters have highest value)
     - mkdir -p $PREFIX/etc/conda/activate.d
-    - cp "${RECIPE_DIR}/activate.sh" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.sh"
-    - cp "${RECIPE_DIR}/activate.csh" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.csh"
-    - cp "${RECIPE_DIR}/activate.fish" "${PREFIX}/etc/conda/activate.d/999-${PKG_NAME}-activate.fish"
+    - cp "${RECIPE_DIR}/activate.sh" "${PREFIX}/etc/conda/activate.d/zzz-${PKG_NAME}-activate.sh"
+    - cp "${RECIPE_DIR}/activate.csh" "${PREFIX}/etc/conda/activate.d/zzz-${PKG_NAME}-activate.csh"
+    - cp "${RECIPE_DIR}/activate.fish" "${PREFIX}/etc/conda/activate.d/zzz-${PKG_NAME}-activate.fish"
 
     - mkdir -p $PREFIX/etc/conda/deactivate.d
-    - cp "${RECIPE_DIR}/deactivate.sh" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.sh"
-    - cp "${RECIPE_DIR}/deactivate.csh" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.csh"
-    - cp "${RECIPE_DIR}/deactivate.fish" "${PREFIX}/etc/conda/deactivate.d/999-${PKG_NAME}-deactivate.fish"
+    - cp "${RECIPE_DIR}/deactivate.sh" "${PREFIX}/etc/conda/deactivate.d/zzz-${PKG_NAME}-deactivate.sh"
+    - cp "${RECIPE_DIR}/deactivate.csh" "${PREFIX}/etc/conda/deactivate.d/zzz-${PKG_NAME}-deactivate.csh"
+    - cp "${RECIPE_DIR}/deactivate.fish" "${PREFIX}/etc/conda/deactivate.d/zzz-${PKG_NAME}-deactivate.fish"
     - ls -lhtra $PREFIX/etc/conda/activate.d/
     - ls -lhtra $PREFIX/etc/conda/deactivate.d/
 
