@@ -124,31 +124,21 @@ build:
     # Add MG5aMC_PY8_interface
     # https://github.com/mg5amcnlo/MG5aMC_PY8_interface
 
-    # Need the CXX in Makefile.inc to be available _during_ the build, and so
-    # need to inject the $BUILD_PREFIX CXX ($CXX_FOR_BUILD), but restore to the
-    # $PREFIX CXX after so that at runtime the correct CXX is used.
-    - cp $PREFIX/share/Pythia8/examples/Makefile.inc $PREFIX/share/Pythia8/examples/Makefile.inc.bak
-    - sed -i "/CXX=/c\CXX=$CXX_FOR_BUILD" $PREFIX/share/Pythia8/examples/Makefile.inc
-    # Patch out use of libHEPMC3 for dynamic linking to work
-    # MG5aMC_PY8_interface.cc uses Pythia8Plugins/HepMC2.h only
-    # c.f. https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/MG5aMC_PY8_interface.cc#L11
-    - sed -i "s/HEPMC3_USE=true/HEPMC3_USE=false/g" $PREFIX/share/Pythia8/examples/Makefile.inc
-
     - curl -sL https://github.com/mg5amcnlo/MG5aMC_PY8_interface/archive/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e.tar.gz | tar -xz
     - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
     - cd MG5aMC_PY8_interface
     - echo -e "\n# Compiling MG5aMC_PY8_interface"
-    # Use --pythia8_makefile for dynamic linking of libHepMC
-    # https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/compile.py#L35
-    - python compile.py --pythia8_makefile $PREFIX
+    # Manually compile MG5aMC_PY8_interface.cc instead of using compile.py
+    - $CXX MG5aMC_PY8_interface.cc -o MG5aMC_PY8_interface $CXXFLAGS $(pythia8-config --cxxflags) $LDFLAGS $(pythia8-config --ldflags) -lHepMC
+    - echo "UNSPECIFIED" > MG5AMC_VERSION_ON_INSTALL
+    - pythia8-config --version > PYTHIA8_VERSION_ON_INSTALL
+
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
     # TODO: Determine the minimum required set of files to install
     - cp MG5aMC_PY8_interface/* $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface/
     - rm -rf MG5aMC_PY8_interface
 
-    # Restore Makefile.inc
-    - mv $PREFIX/share/Pythia8/examples/Makefile.inc.bak $PREFIX/share/Pythia8/examples/Makefile.inc
     # Build configuration file be replacing placeholder values with PREFIX
     - echo -e "\n# Configuring $PREFIX/MG5_aMC/input/mg5_configuration.txt"
     - cp $RECIPE_DIR/mg5_configuration.txt .
