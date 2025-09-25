@@ -137,7 +137,7 @@ build:
     - cd MG5aMC_PY8_interface
     - echo -e "\n# Compiling MG5aMC_PY8_interface"
     - if: target_platform != build_platform
-      then: python compile.py $BUILD_PREFIX
+      then: python compile.py $BUILD_PREFIX --pythia8_makefile
       else: python compile.py $PREFIX
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
@@ -200,6 +200,7 @@ requirements:
         - cross-python_${{ target_platform }}
         - python
         - pythia8 8.311.*
+        - hepmc2
     - sed
     - grep
     - curl  # for downloading MG5aMC_PY8_interface
