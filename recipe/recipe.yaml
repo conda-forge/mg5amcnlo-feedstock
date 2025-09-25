@@ -130,7 +130,9 @@ build:
     - mv MG5aMC_PY8_interface-5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e MG5aMC_PY8_interface
     - cd MG5aMC_PY8_interface
     - echo -e "\n# Compiling MG5aMC_PY8_interface"
-    - python compile.py $PREFIX
+    # Use --pythia8_makefile for dynamic linking of libHepMC
+    # https://github.com/mg5amcnlo/MG5aMC_PY8_interface/blob/5d82df1b77bd2b69ffeae5b6bfe100a62b31c30e/compile.py#L35C3-L35C76
+    - python compile.py --pythia8_makefile $PREFIX
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
     # TODO: Determine the minimum required set of files to install
