@@ -131,7 +131,9 @@ build:
     # Manually compile MG5aMC_PY8_interface.cc instead of using compile.py
     - $CXX ./MG5aMC_PY8_interface.cc -o MG5aMC_PY8_interface $CXXFLAGS $(pythia8-config --cxxflags) $LDFLAGS $(pythia8-config --ldflags) -lHepMC
     - echo "UNSPECIFIED" > MG5AMC_VERSION_ON_INSTALL
-    - pythia8-config --version > PYTHIA8_VERSION_ON_INSTALL
+    # FIXME: pythia8-config --version added in 8.312
+    # - pythia8-config --version > PYTHIA8_VERSION_ON_INSTALL
+    - echo "8.311" > PYTHIA8_VERSION_ON_INSTALL
 
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/MG5aMC_PY8_interface
     - cd ..
