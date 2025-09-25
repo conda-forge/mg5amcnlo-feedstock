@@ -192,6 +192,7 @@ requirements:
       then:
         - cross-python_${{ target_platform }}
         - python
+        - zlib  # needed for PYTHIA8 compile
     - sed
     - grep
     - curl  # for downloading MG5aMC_PY8_interface
