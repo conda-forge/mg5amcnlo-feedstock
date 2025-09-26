@@ -221,6 +221,7 @@ requirements:
     - if: linux and (x86_64 or ppc64le)
       then: ninja-hep-ph-static 1.1.*
     - collier-static
+    - pythia8 8.311.*  # DEBUG
     - mg5amcnlo-pythia8-interface
     - hepmc2
     - hepmc3
