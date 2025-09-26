@@ -168,6 +168,7 @@ requirements:
     - make
     - if: build_platform != target_platform
       then:
+        # Need cross-python to be able to use Python libraries
         - cross-python_${{ target_platform }}
         - python
     - sed
