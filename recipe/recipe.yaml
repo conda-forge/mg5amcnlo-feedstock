@@ -222,10 +222,6 @@ requirements:
     - if: not (osx and x86_64)
       # Tested against Pythia8 v8.311 and v8.312
       then: mg5amcnlo-pythia8-interface
-    # Move this to mg5amcnlo-pythia8-interface
-    - if: linux and aarch64
-      then: pythia8 8.311.*
-      else: pythia8
     - hepmc2
     - hepmc3
     - ghostscript
