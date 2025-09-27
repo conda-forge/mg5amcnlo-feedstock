@@ -221,6 +221,7 @@ requirements:
     - pythia8 8.312.*  # DEBUG
     # c.f. https://github.com/conda-forge/mg5amcnlo-pythia8-interface-feedstock/issues/2
     - if: not (osx and x86_64)
+      # Tested against Pythia8 v8.311 and v8.312
       then: mg5amcnlo-pythia8-interface
     - hepmc2
     - hepmc3
