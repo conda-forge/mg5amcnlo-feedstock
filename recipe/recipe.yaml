@@ -219,7 +219,9 @@ requirements:
       then: ninja-hep-ph-static 1.1.*
     - collier-static
     - pythia8 8.311.*  # DEBUG
-    - mg5amcnlo-pythia8-interface
+    # c.f. https://github.com/conda-forge/mg5amcnlo-pythia8-interface-feedstock/issues/2
+    - if: not (osx and x86_64)
+      then: mg5amcnlo-pythia8-interface
     - hepmc2
     - hepmc3
     - ghostscript
