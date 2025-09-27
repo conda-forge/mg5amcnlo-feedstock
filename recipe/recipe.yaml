@@ -162,7 +162,7 @@ requirements:
   build:
     - ${{ stdlib('c') }}
     # Compilers needed to set names in mg5_configuration.txt and will be
-    # used in the future along with make when bugs with Pythia8 are fixed
+    # used in the future along with make
     - ${{ compiler('cxx') }}
     - ${{ compiler('fortran') }}
     - make
