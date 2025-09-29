@@ -19,7 +19,7 @@ source:
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  number: 5
+  number: 6
   skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
     # Remove unnecessary files
