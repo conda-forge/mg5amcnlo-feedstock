@@ -207,6 +207,8 @@ requirements:
     - lhapdf
     - ply
     - bc  # Needed to run showering
+    - if: linux
+      then: procps-ng  # Needed for pgrep in madgraph/various/cluster.py
     # MG5_aMC/vendor/ libraries
     - oneloop-static
     - iregi-static 1.1.0.*
