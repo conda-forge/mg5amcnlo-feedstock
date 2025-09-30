@@ -7,7 +7,7 @@
 
 [project]
 name = "mg5amcnlo-feedstock"
-version = "3.52.2"  # conda-smithy version used to generate this file
+version = "3.52.3"  # conda-smithy version used to generate this file
 description = "Pixi configuration for conda-forge/mg5amcnlo-feedstock"
 authors = ["@conda-forge/mg5amcnlo"]
 channels = ["conda-forge"]
