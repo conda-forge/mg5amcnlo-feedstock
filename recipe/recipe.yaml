@@ -283,13 +283,13 @@ tests:
       # c.f. https://github.com/mg5amcnlo/mg5amcnlo/issues/194
       - test ! -f ME5_debug
 
-      - if: build_platform == target_platform
+      # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3
+      - if: (build_platform == target_platform) and not (osx and x86_64)
         then:
           - lhapdf install NNPDF23_nlo_as_0119_qed &> download_log.txt
           - echo -e "\n# Running tutorial_amc-at-nlo.mg5"
           - mg5_aMC ./tutorial_amc-at-nlo.mg5
           - ls -lhtra
-          # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/3
           - test ! -f ME5_debug
 
 about:
