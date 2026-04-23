@@ -19,7 +19,7 @@ source:
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  number: 6
+  number: 7
   skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
     # Remove unnecessary files
@@ -85,29 +85,32 @@ build:
     - ln -s $PREFIX/lib/libavh_olo.a $PREFIX/MG5_aMC/HEPTools/lib/
     - for file in $PREFIX/include/oneloop/*; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/oneloop/; ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
 
-    - if: (linux and (x86_64 or ppc64le))
-      then:
-        ## Ninja
-        - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin
-        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
-        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include
-        - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin
-        - echo -e "\n# Symlinking Ninja"
-        ### Ninja libs
-        - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/
-        - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/
-        ### Ninja includes
-        - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-        - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-        - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
-        - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja
-        - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja
-        - for file in $PREFIX/MG5_aMC/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
-        - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja
-        - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja
-        ### Ninja bins
-        - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/
-        - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/
+    ## Ninja
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/bin
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/lib
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/include
+    - mkdir -p $PREFIX/MG5_aMC/HEPTools/ninja/bin
+    - echo -e "\n# Symlinking Ninja"
+    ### Ninja libs
+    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/ninja/lib/
+    - ln -s $PREFIX/lib/libninja.a $PREFIX/MG5_aMC/HEPTools/lib/
+    ### Ninja includes
+    - ln -s $PREFIX/include/mninja.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+    - ln -s $PREFIX/include/ninjago_module.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+    - ln -s $PREFIX/include/ninjavholo.mod $PREFIX/MG5_aMC/HEPTools/ninja/include/
+    - ln -s $PREFIX/include/ninja $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja
+    - ln -s $PREFIX/include/quadninja $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja
+    - for file in $PREFIX/MG5_aMC/HEPTools/ninja/include/*.mod; do ln -s "$file" $PREFIX/MG5_aMC/HEPTools/include/; done
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/ninja $PREFIX/MG5_aMC/HEPTools/include/ninja
+    - ln -s $PREFIX/MG5_aMC/HEPTools/ninja/include/quadninja $PREFIX/MG5_aMC/HEPTools/include/quadninja
+    ### Ninja bins
+    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/ninja/bin/
+    - ln -s $PREFIX/bin/ninja-config $PREFIX/MG5_aMC/HEPTools/bin/
+    ### Ninja VERSION files
+    # c.f. https://github.com/mg5amcnlo/HEPToolsInstallers/commit/4e931d79af6a9f59d67e1951179f4aad7cbc1547
+    # FIXME: osx-arm64 raises 'Bad CPU type in executable' so will need to find an alternative way later.
+    - if: not (osx and arm64)
+      then: $PREFIX/bin/ninja-config --version > $PREFIX/MG5_aMC/HEPTools/ninja/VERSION
 
     ## Collier
     - mkdir -p $PREFIX/MG5_aMC/HEPTools/collier/include
@@ -127,9 +130,6 @@ build:
     - sed -i "s|REPLACE_WITH_BASENAME_CXX|$(basename ${CXX_FOR_BUILD//$BUILD/$HOST})|g" mg5_configuration.txt
     # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/13
     - sed -i "s|# automatic_html_opening = True|automatic_html_opening = False|g" mg5_configuration.txt
-    # Ninja settings in mg5_configuration.txt
-    - if: (linux and (x86_64 or ppc64le))
-      then: sed -i '/ninja =/s/^# //g' mg5_configuration.txt
     - mv mg5_configuration.txt $PREFIX/MG5_aMC/input/mg5_configuration.txt
 
     # Setup links
@@ -185,8 +185,7 @@ requirements:
     - iregi-static 1.1.0.*
     - qcdloop-fortran-static
     # HEPTools
-    - if: linux and (x86_64 or ppc64le)
-      then: ninja-hep-ph-static 1.1.*
+    - ninja-hep-ph-static
     - collier-static
     - hepmc2
     - hepmc3
@@ -215,11 +214,7 @@ requirements:
     - qcdloop-fortran-static
     - libtirpc  # Needed for XDR library symbols used by StdHEP for NLO
     # HEPTools
-    # ninja-hep-ph uses libquadmath and so does not support macOS or aarch64
-    # mg5amcnlo v3.5.7 requires ninja-hep-ph v1.1.0 and will fail to compile
-    # for ninja-hep-ph v1.2.0
-    - if: linux and (x86_64 or ppc64le)
-      then: ninja-hep-ph-static 1.1.*
+    - ninja-hep-ph-static
     - collier-static
     # c.f. https://github.com/conda-forge/mg5amcnlo-pythia8-interface-feedstock/issues/2
     - if: not (osx and x86_64)
@@ -259,6 +254,9 @@ tests:
         - MG5_aMC/vendor/StdHEP/lib/libstdhep.a
         - MG5_aMC/vendor/StdHEP/lib/libstdhepC.a
         - MG5_aMC/vendor/StdHEP/lib/libFmcfio.a
+
+        - if: not (osx and x86_64)
+          then: MG5_aMC/HEPTools/ninja/VERSION
       bin:
         - mg5_aMC
   - files:
