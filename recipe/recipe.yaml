@@ -2,33 +2,30 @@ schema_version: 1
 
 context:
   name: mg5amcnlo
-  version: "3.5.7"
+  version: "3.7.2"
 
 package:
   name: ${{ name }}
   version: ${{ version }}
 
 source:
-  - url: https://github.com/hep-packaging-coordination/mg5amcnlo-release-mirror/releases/download/${{ version }}/MG5_aMC_v${{ version }}.tar.gz
-    sha256: ca3e027f078438318bd4143a102aebc2d51358f537b5d52bbc574fe49a6a901e
-    target_directory: source
+  - url: http://launchpad.net/mg5amcnlo/3.0/3.7.x/+download/MG5_aMC_v${{ version }}.tar.gz
+    sha256: 278c447ffb3b2b6fe22fe1214bd74efc971058912053d6553299e5752e2d5648
     patches:
       # c.f. https://github.com/conda-forge/mg5amcnlo-feedstock/issues/12
       - remove-cuttools-compiler-requirement.patch
       - add-libtirpc-to-nlo-extralibs-for-xdr.patch
 
 build:
-  # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  number: 6
-  skip: match(python, "<3.7") or match(python, ">3.11") or win
+  number: 0
+  skip: match(python, "<3.7") or win
   script:
+    - mv MG5_aMC_v${{ version | replace(".", "_") }} source
     # Remove unnecessary files
     - rm -r source/.github
     - rm -r source/tests
     - rm source/.bzrignore
     - rm source/.gitignore
-    - rm source/code-notes
-    - rm source/README
     - rm source/UpdateNotes.txt
     # FIXME: Remove prebuilt binary added in tarball
     - rm source/vendor/DiscreteSampler/check
