@@ -14,10 +14,10 @@ Subject: [PATCH] FIX: Add libtirpc to NLO EXTRALIBS to provide XDR symbols
  madgraph/various/shower_card.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/madgraph/various/shower_card.py b/madgraph/various/shower_card.py
+diff --git a/MG5_aMC_v3_7_2/madgraph/various/shower_card.py b/MG5_aMC_v3_7_2/madgraph/various/shower_card.py
 index 16ed72b..ac8fdc7 100755
---- a/madgraph/various/shower_card.py
-+++ b/madgraph/various/shower_card.py
+--- a/MG5_aMC_v3_7_2/madgraph/various/shower_card.py
++++ b/MG5_aMC_v3_7_2/madgraph/various/shower_card.py
 @@ -188,7 +188,7 @@ class ShowerCard(banner.RunCard):
              self.add_param("DM_%i" % i, "", hidden=True, comment="decay syntax (warning syntax depend of the PS used)")
  

@@ -9,10 +9,10 @@ Subject: [PATCH] FIX: Remove overly strict CutTools compiler requirements
  madgraph/interface/amcatnlo_run_interface.py | 20 --------------------
  1 file changed, 20 deletions(-)
 
-diff --git a/madgraph/interface/amcatnlo_run_interface.py b/madgraph/interface/amcatnlo_run_interface.py
+diff --git a/MG5_aMC_v3_7_2/madgraph/interface/amcatnlo_run_interface.py b/MG5_aMC_v3_7_2/madgraph/interface/amcatnlo_run_interface.py
 index 38a4605..fd08010 100755
---- a/madgraph/interface/amcatnlo_run_interface.py
-+++ b/madgraph/interface/amcatnlo_run_interface.py
+--- a/MG5_aMC_v3_7_2/madgraph/interface/amcatnlo_run_interface.py
++++ b/MG5_aMC_v3_7_2/madgraph/interface/amcatnlo_run_interface.py
 @@ -5448,26 +5448,6 @@ PYTHIA8LINKLIBS=%(pythia8_prefix)s/lib/libpythia8.a -lz -ldl"""%{'pythia8_prefix
              not os.path.exists(os.path.realpath(pjoin(libdir, 'mpmodule.mod'))):
              raise aMCatNLOError('CutTools compilation failed.')            
