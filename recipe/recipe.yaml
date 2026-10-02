@@ -19,7 +19,7 @@ source:
 
 build:
   # FIXME: mg5amcnlo doesn't support Python 3.12 yet
-  number: 6
+  number: 7
   skip: match(python, "<3.7") or match(python, ">3.11") or win
   script:
     # Remove unnecessary files
@@ -202,6 +202,8 @@ requirements:
     - python
     - six
     - numpy
+    # input/mg5_configuration.txt points at $PREFIX/bin/fastjet-config, used to compile generated code
+    - fastjet-cxx-devel
     - fastjet-contrib
     - emela
     - lhapdf
